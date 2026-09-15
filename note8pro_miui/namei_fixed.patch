@@ -1,23 +1,10 @@
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3635,6 +3635,10 @@ out2:
- 	mnt_drop_write(path.mnt);
- out:
- 	path_put(&path);
-+#ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
-+	int old_dfd = nd->dfd;
-+	struct filename *fake_filename = NULL;
-+#endif
- 	return error;
- }
- 
-@@ -3690,6 +3694,10 @@ static struct file *path_openat(struct nameidata *nd,
+@@ -3675,6 +3675,11 @@ static struct file *path_openat(struct nameidata *nd,
  			const struct open_flags *op, unsigned flags)
  {
 +#ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
 +	int old_dfd = nd->dfd;
 +	struct filename *fake_filename = NULL;
-+#endif
++#endif // #ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
  	const char *s;
  	struct file *file;
  	int opened = 0;
